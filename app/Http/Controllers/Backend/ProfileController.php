@@ -16,8 +16,7 @@ class ProfileController extends Controller
 {
     public function edit(User $profile)
     {
-        $this->authorizeOwner($profile);
- 
+        $this->authorizeOwner($profile); 
         return view('backend.pages.profile.edit', ['user' => $profile]);
     }
  
