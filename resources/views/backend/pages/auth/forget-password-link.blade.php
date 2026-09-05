@@ -70,6 +70,7 @@
                                         @endif
                                     <form action="{{ route('reset.password.post') }}" method="post">
                                     @csrf
+                                        <input type="hidden" name="token" value="{{ $token }}">
                                         <div class="mb-3">
                                             <label for="Email" class="form-label">Enter Registered Email'id *</label>
                                             <input type="text" class="form-control" id="Email" placeholder="Enter email" name="email" value="{{ old('email') }}"  autofocus>                                            
