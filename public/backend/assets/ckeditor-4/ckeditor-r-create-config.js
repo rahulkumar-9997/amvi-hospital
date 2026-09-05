@@ -1,4 +1,6 @@
-/*Bootstrap grid plugin - DEFINE THIS FIRST */
+/* ============================================================
+   Bootstrap Grid Plugin — expanded layouts + live preview colors
+   ============================================================ */
 CKEDITOR.plugins.add("bootstrapgrid", {
     init: function (editor) {
         editor.on("instanceReady", function () {
@@ -7,15 +9,26 @@ CKEDITOR.plugins.add("bootstrapgrid", {
                 style.setAttribute("type", "text/css");
                 style.setText(`
                     .bootstrap-grid-helper {
-                        background: #f8f9fa !important;
-                        padding: 15px !important;
-                        border: 2px dashed #007bff !important;
+                        background: linear-gradient(135deg, #eef4ff 0%, #f7faff 100%) !important;
+                        padding: 18px !important;
+                        border: 2px dashed #4c8bf5 !important;
+                        border-radius: 8px !important;
                         text-align: center !important;
                         margin: 5px 0 !important;
-                        min-height: 50px !important;
+                        min-height: 56px !important;
                         display: flex !important;
                         align-items: center !important;
                         justify-content: center !important;
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+                        font-size: 13px !important;
+                        font-weight: 600 !important;
+                        color: #3a5db0 !important;
+                        letter-spacing: 0.02em !important;
+                        transition: background 0.2s ease, border-color 0.2s ease !important;
+                    }
+                    .bootstrap-grid-helper:hover {
+                        background: linear-gradient(135deg, #e2ecff 0%, #eef4ff 100%) !important;
+                        border-color: #2f6fe0 !important;
                     }
                     .row {
                         display: flex;
@@ -23,7 +36,7 @@ CKEDITOR.plugins.add("bootstrapgrid", {
                         margin-right: -15px;
                         margin-left: -15px;
                     }
-                    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, 
+                    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
                     .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
                         position: relative;
                         width: 100%;
@@ -50,7 +63,7 @@ CKEDITOR.plugins.add("bootstrapgrid", {
         });
 
         editor.ui.addRichCombo("BootstrapGrid", {
-            label: "Bootstrap Grid",
+            label: "Layout Grid",
             title: "Insert Bootstrap Grid",
             toolbar: "insert",
             panel: {
@@ -62,53 +75,65 @@ CKEDITOR.plugins.add("bootstrapgrid", {
             },
 
             init: function () {
-                this.add("2cols", "2 Columns (50/50)", "2 equal columns");
-                this.add("3cols", "3 Columns (33/33/33)", "3 equal columns");
-                this.add("4cols", "4 Columns (25/25/25/25)", "4 equal columns");
-                this.add(
-                    "main-sidebar",
-                    "Main + Sidebar (8/4)",
-                    "Main content with sidebar",
-                );
-                this.add(
-                    "sidebar-main",
-                    "Sidebar + Main (4/8)",
-                    "Sidebar with main content",
-                );
-                this.add(
-                    "main-sidebar-9-3",
-                    "Main + Sidebar (9/3)",
-                    "Main content with small sidebar",
-                );
+                this.add("2cols", "2 Columns (50 / 50)", "2 equal columns");
+                this.add("3cols", "3 Columns (33 / 33 / 33)", "3 equal columns");
+                this.add("4cols", "4 Columns (25 / 25 / 25 / 25)", "4 equal columns");
+                this.add("6cols", "6 Columns (16 x 6)", "6 equal columns");
+                this.add("main-sidebar", "Main + Sidebar (8 / 4)", "Main content with sidebar");
+                this.add("sidebar-main", "Sidebar + Main (4 / 8)", "Sidebar with main content");
+                this.add("main-sidebar-9-3", "Main + Sidebar (9 / 3)", "Main content with small sidebar");
+                this.add("thirds-asym", "Asymmetric (7 / 5)", "Slightly uneven two column split");
+                this.add("hero-two", "Hero + Two Below (12 / 6 / 6)", "Full-width header, two columns below");
             },
 
             onClick: function (value) {
-                var html = "";
+                var col = function (size, label) {
+                    return (
+                        '<div class="col-md-' +
+                        size +
+                        '"><div class="bootstrap-grid-helper">' +
+                        label +
+                        " (" +
+                        size +
+                        ")</div></div>"
+                    );
+                };
+                var row = function (inner) {
+                    return '<div class="row">' + inner + "</div><p>&nbsp;</p>";
+                };
 
+                var html = "";
                 switch (value) {
                     case "2cols":
-                        html =
-                            '<div class="row"><div class="col-md-6"><div class="bootstrap-grid-helper">Column 1 (6)</div></div><div class="col-md-6"><div class="bootstrap-grid-helper">Column 2 (6)</div></div></div><p>&nbsp;</p>';
+                        html = row(col(6, "Column 1") + col(6, "Column 2"));
                         break;
                     case "3cols":
-                        html =
-                            '<div class="row"><div class="col-md-4"><div class="bootstrap-grid-helper">Column 1 (4)</div></div><div class="col-md-4"><div class="bootstrap-grid-helper">Column 2 (4)</div></div><div class="col-md-4"><div class="bootstrap-grid-helper">Column 3 (4)</div></div></div><p>&nbsp;</p>';
+                        html = row(col(4, "Column 1") + col(4, "Column 2") + col(4, "Column 3"));
                         break;
                     case "4cols":
-                        html =
-                            '<div class="row"><div class="col-md-3"><div class="bootstrap-grid-helper">Column 1 (3)</div></div><div class="col-md-3"><div class="bootstrap-grid-helper">Column 2 (3)</div></div><div class="col-md-3"><div class="bootstrap-grid-helper">Column 3 (3)</div></div><div class="col-md-3"><div class="bootstrap-grid-helper">Column 4 (3)</div></div></div><p>&nbsp;</p>';
+                        html = row(
+                            col(3, "Column 1") + col(3, "Column 2") + col(3, "Column 3") + col(3, "Column 4"),
+                        );
+                        break;
+                    case "6cols":
+                        html = row(
+                            col(2, "1") + col(2, "2") + col(2, "3") + col(2, "4") + col(2, "5") + col(2, "6"),
+                        );
                         break;
                     case "main-sidebar":
-                        html =
-                            '<div class="row"><div class="col-md-8"><div class="bootstrap-grid-helper">Main Content (8)</div></div><div class="col-md-4"><div class="bootstrap-grid-helper">Sidebar (4)</div></div></div><p>&nbsp;</p>';
+                        html = row(col(8, "Main Content") + col(4, "Sidebar"));
                         break;
                     case "sidebar-main":
-                        html =
-                            '<div class="row"><div class="col-md-4"><div class="bootstrap-grid-helper">Sidebar (4)</div></div><div class="col-md-8"><div class="bootstrap-grid-helper">Main Content (8)</div></div></div><p>&nbsp;</p>';
+                        html = row(col(4, "Sidebar") + col(8, "Main Content"));
                         break;
                     case "main-sidebar-9-3":
-                        html =
-                            '<div class="row"><div class="col-md-9"><div class="bootstrap-grid-helper">Main Content (9)</div></div><div class="col-md-3"><div class="bootstrap-grid-helper">Sidebar (3)</div></div></div><p>&nbsp;</p>';
+                        html = row(col(9, "Main Content") + col(3, "Sidebar"));
+                        break;
+                    case "thirds-asym":
+                        html = row(col(7, "Primary") + col(5, "Secondary"));
+                        break;
+                    case "hero-two":
+                        html = row(col(12, "Hero Banner")) + row(col(6, "Left") + col(6, "Right"));
                         break;
                 }
                 editor.insertHtml(html);
@@ -122,9 +147,29 @@ window.CKEDITOR_ROUTES = window.CKEDITOR_ROUTES || {
     imagelist: "/ckeditor/images",
     delete: "/ckeditor/delete",
 };
+
 let currentEditorInstance = null;
+
+/* ============================================================
+   Modernized modal + toast styling
+   ============================================================ */
 const modalStyles = `
     <style>
+        :root {
+            --gm-accent: #4c6ef5;
+            --gm-accent-dark: #3b5bdb;
+            --gm-danger: #e03131;
+            --gm-danger-dark: #c92a2a;
+            --gm-success: #2f9e44;
+            --gm-bg: #ffffff;
+            --gm-surface: #f8f9fb;
+            --gm-border: #e6e8ee;
+            --gm-text: #1c1f26;
+            --gm-text-muted: #7a8194;
+            --gm-radius: 12px;
+            --gm-shadow: 0 12px 40px rgba(20, 24, 40, 0.18);
+        }
+
         .ckeditor-modal {
             display: none;
             position: fixed;
@@ -133,76 +178,170 @@ const modalStyles = `
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background: rgba(15, 18, 30, 0.55);
+            backdrop-filter: blur(3px);
+            animation: gm-fade-in 0.15s ease-out;
         }
+
+        @keyframes gm-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes gm-pop-in {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         .ckeditor-modal-content {
-            background-color: #fefefe;
-            margin: 1% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 1000px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: var(--gm-bg);
+            margin: 2.5% auto;
+            padding: 24px 26px 20px;
+            border: none;
+            width: 92%;
+            max-width: 1040px;
+            border-radius: var(--gm-radius);
+            box-shadow: var(--gm-shadow);
             z-index: 999999 !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            animation: gm-pop-in 0.18s ease-out;
         }
+
         .ckeditor-modal-header {
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--gm-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .ckeditor-modal-header h3 {
             margin: 0;
-            color: #333;
+            color: var(--gm-text);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
         }
+
         .ckeditor-modal-close {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
+            color: var(--gm-text-muted);
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 1;
             cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.15s ease, color 0.15s ease;
         }
+
         .ckeditor-modal-close:hover {
-            color: #000;
+            background: var(--gm-surface);
+            color: var(--gm-text);
         }
+
+        .gallery-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .gallery-search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .gallery-search-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 14px 10px 36px;
+            border: 1px solid var(--gm-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--gm-surface);
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .gallery-search-input:focus {
+            outline: none;
+            border-color: var(--gm-accent);
+            background: var(--gm-bg);
+        }
+
+        .gallery-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gm-text-muted);
+            pointer-events: none;
+            font-size: 14px;
+        }
+
         #gallery-scroll-container {
-            max-height: 550px;
+            max-height: 520px;
             overflow-y: auto;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background: #fafafa;
+            padding: 4px;
+            border-radius: var(--gm-radius);
         }
+
+        #gallery-scroll-container.drag-over {
+            outline: 2px dashed var(--gm-accent);
+            outline-offset: -6px;
+            background: rgba(76, 110, 245, 0.05);
+            border-radius: var(--gm-radius);
+        }
+
         #gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px;
         }
+
         .gallery-image-item {
             position: relative;
             border-radius: 10px;
             overflow: hidden;
-            background: #fff;
-            border: 1px solid #e5e5e5;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
+            background: var(--gm-bg);
+            border: 1px solid var(--gm-border);
+            box-shadow: 0 1px 3px rgba(20, 24, 40, 0.06);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
         }
+
         .gallery-image-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(20, 24, 40, 0.14);
         }
+
         .gallery-image-item img {
             width: 100%;
-            height: 150px;
+            height: 140px;
             object-fit: cover;
             cursor: pointer;
             display: block;
+            transition: opacity 0.2s ease;
         }
+
         .gallery-image-item img:hover {
-            opacity: 0.8;
+            opacity: 0.85;
         }
+
+        .gallery-image-name {
+            padding: 6px 10px 8px;
+            font-size: 11px;
+            color: var(--gm-text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .delete-image-btn {
             position: absolute;
             top: 6px;
@@ -211,45 +350,155 @@ const modalStyles = `
             height: 26px;
             border: none;
             border-radius: 50%;
-            background: #dc3545;
+            background: rgba(224, 49, 49, 0.92);
             color: #fff;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
             line-height: 1;
+            opacity: 0;
+            transition: opacity 0.15s ease, background 0.15s ease, transform 0.15s ease;
         }
+
+        .gallery-image-item:hover .delete-image-btn {
+            opacity: 1;
+        }
+
         .delete-image-btn:hover {
-            background: #c82333;
+            background: var(--gm-danger-dark);
             transform: scale(1.1);
         }
+
         .gallery-loader {
             text-align: center;
-            padding: 15px;
-            color: #666;
-            font-size: 14px;
+            padding: 16px;
+            color: var(--gm-text-muted);
+            font-size: 13px;
         }
+
         .upload-btn-in-modal {
-            margin-bottom: 15px;
-            padding: 10px 20px;
-            background: #28a745;
+            padding: 10px 18px;
+            background: var(--gm-accent);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(76, 110, 245, 0.35);
+            transition: background 0.15s ease, transform 0.1s ease;
         }
+
         .upload-btn-in-modal:hover {
-            background: #218838;
+            background: var(--gm-accent-dark);
         }
+
+        .upload-btn-in-modal:active {
+            transform: scale(0.97);
+        }
+
+        .upload-btn-in-modal:disabled {
+            opacity: 0.7;
+            cursor: default;
+        }
+
         .pagination-status {
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             font-size: 12px;
-            color: #666;
+            color: var(--gm-text-muted);
+        }
+
+        .gallery-drop-hint {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gm-text-muted);
+            font-size: 13px;
+            border: 2px dashed var(--gm-border);
+            border-radius: var(--gm-radius);
+            grid-column: 1 / -1;
+        }
+
+        /* Toast notifications, replacing alert() popups */
+        #gm-toast-stack {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999999 !important;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .gm-toast {
+            min-width: 240px;
+            max-width: 340px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(20, 24, 40, 0.2);
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: gm-toast-in 0.2s ease-out;
+        }
+
+        @keyframes gm-toast-in {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .gm-toast.gm-success { background: var(--gm-success); }
+        .gm-toast.gm-error { background: var(--gm-danger); }
+        .gm-toast.gm-info { background: var(--gm-accent); }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(0, 0, 0, 0.08);
+            border-radius: 50%;
+            border-top-color: var(--gm-accent);
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 `;
+
+/* Toast helper — replaces alert() with a small non-blocking notice */
+function gmToast(message, type) {
+    type = type || "info";
+    let stack = document.getElementById("gm-toast-stack");
+    if (!stack) {
+        stack = document.createElement("div");
+        stack.id = "gm-toast-stack";
+        document.body.appendChild(stack);
+    }
+    const toast = document.createElement("div");
+    toast.className = "gm-toast gm-" + type;
+    toast.textContent = message;
+    stack.appendChild(toast);
+    setTimeout(function () {
+        toast.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(20px)";
+        setTimeout(function () {
+            toast.remove();
+        }, 250);
+    }, 3200);
+}
 
 // Add modal HTML to page
 if (!document.getElementById("ckeditor-gallery-modal")) {
@@ -260,9 +509,15 @@ if (!document.getElementById("ckeditor-gallery-modal")) {
                     <h3>📷 Image Gallery</h3>
                     <span class="ckeditor-modal-close">&times;</span>
                 </div>
-                <button class="upload-btn-in-modal" id="uploadBtnInModal">
-                    Upload New Image
-                </button>
+                <div class="gallery-toolbar">
+                    <div class="gallery-search-wrap">
+                        <span class="gallery-search-icon">🔍</span>
+                        <input type="text" id="gallerySearchInput" class="gallery-search-input" placeholder="Search images by name..." />
+                    </div>
+                    <button class="upload-btn-in-modal" id="uploadBtnInModal">
+                        ⬆ Upload New Image
+                    </button>
+                </div>
                 <div id="simple-image-gallery">
                     <div id="gallery-scroll-container">
                         <div id="gallery-grid">
@@ -288,35 +543,85 @@ if (!document.getElementById("ckeditor-gallery-modal")) {
     closeBtn.onclick = function () {
         modal.style.display = "none";
     };
-    window.onclick = function (event) {
+    window.addEventListener("click", function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    };
+    });
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && modal.style.display === "block") {
+            modal.style.display = "none";
+        }
+    });
+
+    // Drag & drop upload directly onto the gallery
+    modal.addEventListener("dragover", function (event) {
+        event.preventDefault();
+        const container = document.getElementById("gallery-scroll-container");
+        if (container) container.classList.add("drag-over");
+    });
+    modal.addEventListener("dragleave", function (event) {
+        const container = document.getElementById("gallery-scroll-container");
+        if (container) container.classList.remove("drag-over");
+    });
+    modal.addEventListener("drop", function (event) {
+        event.preventDefault();
+        const container = document.getElementById("gallery-scroll-container");
+        if (container) container.classList.remove("drag-over");
+        const files = event.dataTransfer && event.dataTransfer.files;
+        if (files && files.length > 0) {
+            uploadImageFromModal(files[0]);
+        }
+    });
+
+    // Live search filter
+    document.addEventListener("input", function (event) {
+        if (event.target && event.target.id === "gallerySearchInput") {
+            const query = event.target.value.trim().toLowerCase();
+            document.querySelectorAll(".gallery-image-item").forEach(function (item) {
+                const name = (item.getAttribute("data-name") || "").toLowerCase();
+                item.style.display = !query || name.indexOf(query) !== -1 ? "" : "none";
+            });
+        }
+    });
+}
+
+if (typeof CKEDITOR === "undefined") {
+    console.error(
+        "[ckeditor-enhanced.js] CKEDITOR is not defined. Make sure ckeditor.js " +
+            "(the core CKEditor 4 library, e.g. /vendor/ckeditor/ckeditor.js) is " +
+            "loaded on the page BEFORE this script tag.",
+    );
 }
 
 document.querySelectorAll(".ckeditorUpdate4").forEach(function (el) {
-    CKEDITOR.replace(el, {
-        removePlugins: "exportpdf",
-        allowedContent: true,
-        extraAllowedContent: "*(*);*{*}",
-        extraPlugins: "uploadimage, sourcearea, justify, div, bootstrapgrid",
-        filebrowserUploadUrl:
-            window.CKEDITOR_ROUTES.upload + "?_token=" + window.csrfToken,
-        filebrowserImageUploadUrl:
-            window.CKEDITOR_ROUTES.upload + "?_token=" + window.csrfToken,
-        imageUploadUrl:
-            window.CKEDITOR_ROUTES.upload + "?_token=" + window.csrfToken,
-        filebrowserUploadMethod: "form",
-        baseHref: window.location.origin + "/",
-        contentsCss: [
-            CKEDITOR.basePath + "contents.css",
-            "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css",
-        ],
-        resize_enabled: false,
-        image_previewText: " ",
-        removeDialogTabs: "image:advanced",
-        on: {
+    try {
+        CKEDITOR.replace(el, {
+            removePlugins: "exportpdf",
+            allowedContent: true,
+            extraAllowedContent: "*(*);*{*}",
+            // Keep this list to plugins that ship in your CKEditor 4 build.
+            // "bootstrapgrid" is the only custom one added here; if your build
+            // is a minimal/"basic" package, some of the others may not exist —
+            // remove any that throw a "plugin not found" error in the console.
+            extraPlugins: "uploadimage,sourcearea,justify,div,bootstrapgrid",
+            filebrowserUploadUrl:
+                window.CKEDITOR_ROUTES.upload + "?_token=" + window.csrfToken,
+            filebrowserImageUploadUrl:
+                window.CKEDITOR_ROUTES.upload + "?_token=" + window.csrfToken,
+            imageUploadUrl:
+                window.CKEDITOR_ROUTES.upload + "?_token=" + window.csrfToken,
+            filebrowserUploadMethod: "form",
+            baseHref: window.location.origin + "/",
+            contentsCss: [
+                CKEDITOR.basePath + "contents.css",
+                "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css",
+            ],
+            resize_enabled: true,
+            resize_dir: "vertical",
+            image_previewText: " ",
+            removeDialogTabs: "image:advanced",
+            on: {
             instanceReady: function () {
                 this.dataProcessor.htmlFilter.addRules({
                     elements: {
@@ -356,9 +661,17 @@ document.querySelectorAll(".ckeditorUpdate4").forEach(function (el) {
                 });
             },
         },
-    });
+        });
+    } catch (err) {
+        console.error(
+            "[ckeditor-enhanced.js] Failed to initialize CKEditor on element:",
+            el,
+            err,
+        );
+    }
 });
 
+if (typeof CKEDITOR !== "undefined") {
 CKEDITOR.on("dialogDefinition", function (ev) {
     var dialogName = ev.data.name;
     var dialogDefinition = ev.data.definition;
@@ -375,22 +688,24 @@ CKEDITOR.on("dialogDefinition", function (ev) {
                     type: "html",
                     id: "imageGallery",
                     html: `
-                        <div style="padding: 20px; text-align: center;">
-                            <button type="button" 
+                        <div style="padding: 24px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                            <button type="button"
                                 id="open-gallery-modal-btn"
                                 style="
-                                    padding: 12px 24px;
-                                    background: #007bff;
+                                    padding: 12px 26px;
+                                    background: linear-gradient(135deg, #4c6ef5, #3b5bdb);
                                     color: white;
                                     border: none;
-                                    border-radius: 5px;
+                                    border-radius: 8px;
                                     cursor: pointer;
-                                    font-size: 16px;
+                                    font-size: 15px;
+                                    font-weight: 600;
+                                    box-shadow: 0 4px 12px rgba(76,110,245,0.35);
                                 ">
-                                Open Image Gallery
+                                📂 Open Image Gallery
                             </button>
-                            <p style="margin-top: 15px; color: #666; font-size: 12px;">
-                                Click the button to open the full image gallery in a modal window.
+                            <p style="margin-top: 15px; color: #7a8194; font-size: 12px;">
+                                Browse, search, and upload images — or drag &amp; drop a file straight into the gallery.
                             </p>
                         </div>
                     `,
@@ -446,6 +761,7 @@ CKEDITOR.on("dialogDefinition", function (ev) {
         dialogDefinition.resizable = CKEDITOR.DIALOG_RESIZE_BOTH;
     }
 });
+}
 
 let currentPage = 1;
 let loadingImages = false;
@@ -545,8 +861,9 @@ function loadGalleryInModal(reset = false) {
             if (!data.images || data.images.length === 0) {
                 if (currentPage === 1) {
                     galleryGrid.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:30px; color:#666;">
-                        No images found. Click the "Upload New Image" button to add images.
+                    <div class="gallery-drop-hint">
+                        No images found yet.<br>
+                        Click <strong>Upload New Image</strong> above, or drag &amp; drop a file into this area.
                     </div>
                 `;
                     if (statusDiv) statusDiv.innerHTML = "";
@@ -562,14 +879,16 @@ function loadGalleryInModal(reset = false) {
             data.images.forEach((image) => {
                 const imageItem = document.createElement("div");
                 imageItem.className = "gallery-image-item";
+                imageItem.setAttribute("data-name", image.name || "");
                 imageItem.innerHTML = `
-                <img 
-                    src="${image.url}" 
+                <img
+                    src="${image.url}"
                     loading="lazy"
                     onclick="insertImageToEditor('${image.url}')"
                     alt="${escapeHtml(image.name)}"
                     title="Click to insert this image"
                 >
+                <div class="gallery-image-name" title="${escapeHtml(image.name)}">${escapeHtml(image.name)}</div>
                 <button
                     type="button"
                     class="delete-image-btn"
@@ -602,7 +921,7 @@ function loadGalleryInModal(reset = false) {
             }
             if (galleryGrid && currentPage === 1 && reset) {
                 galleryGrid.innerHTML = `
-                <div style="grid-column:1/-1; text-align:center; padding:20px; color:red;">
+                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#e03131;">
                     Error loading images: ${error.message}<br>
                     Please check if the image list endpoint is configured correctly.
                 </div>
@@ -658,7 +977,7 @@ function handleScroll() {
     }
 }
 
-// FIXED: Function to insert image directly into CKEditor
+// Insert image directly into CKEditor
 function insertImageToEditor(imageUrl) {
     console.log("Inserting image:", imageUrl);
     var dialog = CKEDITOR.dialog.getCurrent();
@@ -683,9 +1002,7 @@ function insertImageToEditor(imageUrl) {
         }
 
         console.log("Image URL set in dialog:", imageUrl);
-        alert(
-            "Image selected! You can now adjust size and click OK to insert.",
-        );
+        gmToast("Image selected — adjust size and click OK to insert.", "success");
     } else {
         // If no dialog is open, try to insert directly into editor
         for (var instanceName in CKEDITOR.instances) {
@@ -705,15 +1022,16 @@ function insertImageToEditor(imageUrl) {
                     }
 
                     console.log("Image inserted directly into editor");
-                    alert("Image inserted successfully!");
+                    gmToast("Image inserted successfully!", "success");
                     return;
                 }
             }
         }
 
         console.error("No dialog or editor instance found");
-        alert(
-            "Please open the image dialog first (click on the image button) or click in the editor area before selecting an image.",
+        gmToast(
+            "Open the image dialog first, or click inside the editor before selecting an image.",
+            "error",
         );
         const modal = document.getElementById("ckeditor-gallery-modal");
         if (modal) {
@@ -757,6 +1075,7 @@ function deleteGalleryImageFromModal(imageName, button) {
                 imageItem.remove();
                 totalImagesLoaded--;
                 console.log(result.message || "Image deleted successfully");
+                gmToast("Image deleted.", "success");
                 setTimeout(() => {
                     currentPage = 1;
                     loadGalleryInModal(true);
@@ -765,11 +1084,11 @@ function deleteGalleryImageFromModal(imageName, button) {
         })
         .catch((error) => {
             console.error(error);
-            alert(error.message || "Delete failed");
+            gmToast(error.message || "Delete failed", "error");
         });
 }
 
-// FIXED: Upload function that handles both JSON and HTML responses
+// Upload function that handles both JSON and HTML responses
 function triggerUploadFromModal() {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -797,7 +1116,7 @@ function uploadImageFromModal(file) {
     if (!uploadBtn) return;
 
     const originalText = uploadBtn.innerHTML;
-    uploadBtn.innerHTML = "⏳ Uploading...";
+    uploadBtn.innerHTML = '<span class="spinner"></span>Uploading...';
     uploadBtn.disabled = true;
 
     fetch(uploadUrl, {
@@ -837,7 +1156,7 @@ function uploadImageFromModal(file) {
                     currentPage = 1;
                     hasMoreImages = true;
                     await loadGalleryInModal(true);
-                    alert("Image uploaded successfully!");
+                    gmToast("Image uploaded successfully!", "success");
                     if (
                         confirm(
                             "Do you want to insert this uploaded image into the editor?",
@@ -846,12 +1165,13 @@ function uploadImageFromModal(file) {
                         insertImageToEditor(imageUrl);
                     }
                 } else {
-                    alert("Upload successful but no URL returned");
+                    gmToast("Upload successful but no URL returned", "error");
                 }
             } else {
-                alert(
+                gmToast(
                     "Upload failed: " +
                         (responseData.error?.message || "Unknown error"),
+                    "error",
                 );
             }
         })
@@ -859,11 +1179,7 @@ function uploadImageFromModal(file) {
             uploadBtn.innerHTML = originalText;
             uploadBtn.disabled = false;
             console.error("Upload error:", error);
-            alert(
-                "Upload failed: " +
-                    error.message +
-                    "\nPlease try again or contact support.",
-            );
+            gmToast("Upload failed: " + error.message, "error");
         });
 }
 
@@ -887,34 +1203,3 @@ function escapeHtml(str) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
 }
-const spinnerStyles = `
-    <style>
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(0,0,0,.1);
-            border-radius: 50%;
-            border-top-color: #007bff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .gallery-image-item img {
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-        .gallery-image-item img:hover {
-            opacity: 0.8;
-        }
-        .delete-image-btn {
-            transition: transform 0.2s;
-        }
-        .delete-image-btn:hover {
-            transform: scale(1.1);
-        }
-    </style>
-`;
-document.head.insertAdjacentHTML("beforeend", spinnerStyles);

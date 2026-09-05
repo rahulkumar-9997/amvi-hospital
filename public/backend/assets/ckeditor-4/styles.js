@@ -1,22 +1,16 @@
 ﻿/**
  * Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ *
+ * Enhanced style set — adds callouts, highlights, buttons, badges, cards and
+ * typography helpers on top of the original CKEditor 4 style definitions,
+ * so editors get a richer, more attractive "Styles" dropdown out of the box.
  */
 
-// This file contains style definitions that can be used by CKEditor plugins.
-//
-// The most common use for it is the "stylescombo" plugin which shows the Styles drop-down
-// list containing all styles in the editor toolbar. Other plugins, like
-// the "div" plugin, use a subset of the styles for their features.
-//
-// If you do not have plugins that depend on this file in your editor build, you can simply
-// ignore it. Otherwise it is strongly recommended to customize this file to match your
-// website requirements and design properly.
-//
-// For more information refer to: https://ckeditor.com/docs/ckeditor4/latest/guide/dev_styles.html#style-rules
-
 CKEDITOR.stylesSet.add( 'default', [
-	/* Block styles */
+	/* ============================================================
+	   Block styles
+	   ============================================================ */
 
 	// These styles are already available in the "Format" drop-down list ("format" plugin),
 	// so they are not needed here by default. You may enable them to avoid
@@ -35,6 +29,13 @@ CKEDITOR.stylesSet.add( 'default', [
 
 	{ name: 'Italic Title',		element: 'h2', styles: { 'font-style': 'italic' } },
 	{ name: 'Subtitle',			element: 'h3', styles: { 'color': '#aaa', 'font-style': 'italic' } },
+
+	// Lead paragraph — larger intro text, common in blog/article layouts
+	{ name: 'Lead Paragraph', element: 'p', attributes: { 'class': 'lead-paragraph' } },
+
+	// Drop-cap opening paragraph, classic editorial look
+	{ name: 'Drop Cap Paragraph', element: 'p', attributes: { 'class': 'dropcap-paragraph' } },
+
 	{
 		name: 'Special Container',
 		element: 'div',
@@ -45,7 +46,18 @@ CKEDITOR.stylesSet.add( 'default', [
 		}
 	},
 
-	/* Inline styles */
+	/* ---- Callout / alert boxes ---- */
+	{ name: 'Callout: Info',		element: 'div', attributes: { 'class': 'callout callout-info' } },
+	{ name: 'Callout: Success',	element: 'div', attributes: { 'class': 'callout callout-success' } },
+	{ name: 'Callout: Warning',	element: 'div', attributes: { 'class': 'callout callout-warning' } },
+	{ name: 'Callout: Danger',		element: 'div', attributes: { 'class': 'callout callout-danger' } },
+
+	/* ---- Card container ---- */
+	{ name: 'Card',				element: 'div', attributes: { 'class': 'content-card' } },
+
+	/* ============================================================
+	   Inline styles
+	   ============================================================ */
 
 	// These are core styles available as toolbar buttons. You may opt enabling
 	// some of them in the Styles drop-down list, removing them from the toolbar.
@@ -60,6 +72,23 @@ CKEDITOR.stylesSet.add( 'default', [
 	*/
 
 	{ name: 'Marker',			element: 'span', attributes: { 'class': 'marker' } },
+
+	/* ---- Highlight colors ---- */
+	{ name: 'Highlight: Yellow',	element: 'span', attributes: { 'class': 'highlight highlight-yellow' } },
+	{ name: 'Highlight: Green',	element: 'span', attributes: { 'class': 'highlight highlight-green' } },
+	{ name: 'Highlight: Blue',		element: 'span', attributes: { 'class': 'highlight highlight-blue' } },
+	{ name: 'Highlight: Pink',		element: 'span', attributes: { 'class': 'highlight highlight-pink' } },
+
+	/* ---- Buttons & badges ---- */
+	{ name: 'Button: Primary',		element: 'a', attributes: { 'class': 'btn btn-primary' } },
+	{ name: 'Button: Outline',		element: 'a', attributes: { 'class': 'btn btn-outline' } },
+	{ name: 'Badge: Default',		element: 'span', attributes: { 'class': 'badge' } },
+	{ name: 'Badge: Success',		element: 'span', attributes: { 'class': 'badge badge-success' } },
+	{ name: 'Badge: Danger',		element: 'span', attributes: { 'class': 'badge badge-danger' } },
+
+	/* ---- Typography helpers ---- */
+	{ name: 'Muted Text',			element: 'span', attributes: { 'class': 'text-muted' } },
+	{ name: 'Small Caps',			element: 'span', attributes: { 'class': 'text-small-caps' } },
 
 	{ name: 'Big',				element: 'big' },
 	{ name: 'Small',			element: 'small' },
@@ -79,7 +108,9 @@ CKEDITOR.stylesSet.add( 'default', [
 	{ name: 'Language: RTL',	element: 'span', attributes: { 'dir': 'rtl' } },
 	{ name: 'Language: LTR',	element: 'span', attributes: { 'dir': 'ltr' } },
 
-	/* Object styles */
+	/* ============================================================
+	   Object styles
+	   ============================================================ */
 
 	{
 		name: 'Styled Image (left)',
@@ -91,6 +122,13 @@ CKEDITOR.stylesSet.add( 'default', [
 		name: 'Styled Image (right)',
 		element: 'img',
 		attributes: { 'class': 'right' }
+	},
+
+	// Rounded, framed image with soft shadow — nicer default for inline photos
+	{
+		name: 'Styled Image (framed)',
+		element: 'img',
+		attributes: { 'class': 'image-framed' }
 	},
 
 	{
@@ -108,9 +146,13 @@ CKEDITOR.stylesSet.add( 'default', [
 	},
 
 	{ name: 'Borderless Table',		element: 'table',	styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
+	{ name: 'Striped Table',			element: 'table',	attributes: { 'class': 'table-striped' } },
 	{ name: 'Square Bulleted List',	element: 'ul',		styles: { 'list-style-type': 'square' } },
+	{ name: 'Checklist',				element: 'ul',		attributes: { 'class': 'checklist' } },
 
-	/* Widget styles */
+	/* ============================================================
+	   Widget styles
+	   ============================================================ */
 
 	{ name: 'Clean Image', type: 'widget', widget: 'image', attributes: { 'class': 'image-clean' } },
 	{ name: 'Grayscale Image', type: 'widget', widget: 'image', attributes: { 'class': 'image-grayscale' } },
@@ -134,4 +176,3 @@ CKEDITOR.stylesSet.add( 'default', [
 	{ name: '1080p ', type: 'widget', widget: 'embed', attributes: { 'class': 'embed-1080p' }, group: 'size' }
 
 ] );
-
